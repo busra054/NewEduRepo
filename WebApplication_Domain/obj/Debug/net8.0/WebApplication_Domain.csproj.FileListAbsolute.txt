@@ -1,0 +1,15 @@
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\bin\Debug\net8.0\WebApplication_Domain.deps.json
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\bin\Debug\net8.0\WebApplication_Domain.runtimeconfig.json
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\bin\Debug\net8.0\WebApplication_Domain.dll
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\bin\Debug\net8.0\WebApplication_Domain.pdb
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.csproj.AssemblyReference.cache
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.AssemblyInfoInputs.cache
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.AssemblyInfo.cs
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.csproj.CoreCompileInputs.cache
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.sourcelink.json
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.dll
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\refint\WebApplication_Domain.dll
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.pdb
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\WebApplication_Domain.genruntimeconfig.cache
+C:\Users\bsra4\OneDrive\Masaüstü\WebDockerProje\WebApplication_Domain\obj\Debug\net8.0\ref\WebApplication_Domain.dll
