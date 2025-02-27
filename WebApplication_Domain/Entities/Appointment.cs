@@ -2,6 +2,7 @@
 
 namespace WebApplication_Domain.Entities
 {
+
     public class Appointment
     {
         [Key]
@@ -14,5 +15,8 @@ namespace WebApplication_Domain.Entities
         // Relationships
         public User Student { get; set; }
         public User Teacher { get; set; }
+
+
+
     }
 }

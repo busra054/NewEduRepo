@@ -5,7 +5,7 @@
 namespace WebApplication_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mig4 : Migration
+    public partial class UpdateUserRelations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

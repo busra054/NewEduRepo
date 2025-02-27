@@ -5,7 +5,7 @@
 namespace WebApplication_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addEducationPackagesToDb : Migration
+    public partial class DeleteRequiredFieldBiyography : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

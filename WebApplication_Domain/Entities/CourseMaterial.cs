@@ -21,5 +21,6 @@ namespace WebApplication_Domain.Entities
         // Relationships
         public Course Course { get; set; }
         public User UploadedBy { get; set; }
+        public int UploadedById { get; set; } 
     }
 }

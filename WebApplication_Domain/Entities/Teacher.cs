@@ -14,18 +14,17 @@ namespace WebApplication_Domain.Entities
 
         [Required]
         public int UserId { get; set; }
-        public User User { get; set; } // User ile bire bir ilişki
+        public User User { get; set; }
 
         [Required]
-        public string Biography { get; set; } // Öğretmenin biyografisi
+        public string Biography { get; set; }
 
         [Required]
-        public int ExperienceYears { get; set; } // Deneyim yılı
+        public int ExperienceYears { get; set; }
 
-        public string Certifications { get; set; } // Sertifikalar
-
-        // Öğretmene özgü ilişkiler
+        public string Certifications { get; set; }
         public ICollection<TeacherBranch> TeacherBranches { get; set; } = new List<TeacherBranch>();
         public ICollection<Course> Courses { get; set; } = new List<Course>();
+
     }
 }

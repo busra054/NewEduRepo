@@ -5,7 +5,7 @@
 namespace WebApplication_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class FixCascadePaths : Migration
+    public partial class FixTeacherRequestRequired : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
