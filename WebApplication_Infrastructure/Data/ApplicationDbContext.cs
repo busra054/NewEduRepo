@@ -1,10 +1,12 @@
 ﻿using WebApplication_Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication_Infrastructure.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -25,10 +27,88 @@ namespace WebApplication_Infrastructure.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<CourseEnrollment> courseEnrollments { get; set; }
+        public DbSet<CourseMaterial> courseMaterials { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<TeacherRequest> TeacherRequests { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Course ilişkileri
+            modelBuilder.Entity<Course>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+
+                // Teacher ilişkisi (User üzerinden)
+                entity.HasOne(c => c.Teacher)
+                    .WithMany(u => u.CoursesAsTeacher)
+                    .HasForeignKey(c => c.TeacherId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Package ilişkisi
+                entity.HasOne(c => c.Package)
+                    .WithMany(p => p.Courses)
+                    .HasForeignKey(c => c.PackageId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<CourseEnrollment>(entity =>
+            {
+                entity.HasKey(ce => ce.Id);
+
+                entity.HasOne(ce => ce.Course)
+                    .WithMany(c => c.EnrolledStudents)
+                    .HasForeignKey(ce => ce.CourseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(ce => ce.Student)
+                    .WithMany(s => s.Enrollments) // Student sınıfındaki koleksiyon
+                    .HasForeignKey(ce => ce.StudentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // CourseMaterial ilişkileri
+            modelBuilder.Entity<CourseMaterial>(entity =>
+            {
+                entity.HasKey(cm => cm.Id);
+
+                // Course ilişkisi
+                entity.HasOne(cm => cm.Course)
+                    .WithMany(c => c.CourseMaterials)
+                    .HasForeignKey(cm => cm.CourseId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // UploadedBy ilişkisi (User)
+                entity.HasOne(cm => cm.UploadedBy)
+                    .WithMany(u => u.UploadedMaterials)
+                    .HasForeignKey(cm => cm.UploadedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Teacher-User Bire-Bir İlişki
+            modelBuilder.Entity<Teacher>(entity =>
+            {
+                entity.HasOne(t => t.User)
+                    .WithOne(u => u.TeacherProfile)
+                    .HasForeignKey<Teacher>(t => t.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Student-User Bire-Bir İlişki
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.HasOne(s => s.User)
+                    .WithOne(u => u.StudentProfile)
+                    .HasForeignKey<Student>(s => s.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             modelBuilder.Entity<User>()
                 .HasKey(u => u.Id);
 
@@ -39,20 +119,20 @@ namespace WebApplication_Infrastructure.Data
             modelBuilder.Entity<Branch>()
                 .HasKey(b => b.Id);
 
-            modelBuilder.Entity<TeacherBranch>()
-                .HasKey(tb => tb.Id);
+            modelBuilder.Entity<TeacherBranch>(entity =>
+            {
+                entity.HasKey(tb => tb.Id);
 
-            modelBuilder.Entity<TeacherBranch>()
-                .HasOne(tb => tb.Teacher)
-                .WithMany(t => t.TeacherBranches)
-                .HasForeignKey(tb => tb.TeacherId)
-                .OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(tb => tb.Teacher)
+                    .WithMany(t => t.TeacherBranches)
+                    .HasForeignKey(tb => tb.TeacherId)
+                    .OnDelete(DeleteBehavior.Restrict); // Teachers tablosuna bağlı
 
-            modelBuilder.Entity<TeacherBranch>()
-                .HasOne(tb => tb.Branch)
-                .WithMany(b => b.TeacherBranches)
-                .HasForeignKey(tb => tb.BranchId)
-                .OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(tb => tb.Branch)
+                    .WithMany(b => b.TeacherBranches)
+                    .HasForeignKey(tb => tb.BranchId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
             modelBuilder.Entity<Appointment>()
                 .HasKey(a => a.Id);
@@ -61,13 +141,13 @@ namespace WebApplication_Infrastructure.Data
                 .HasOne(a => a.Student)
                 .WithMany(u => u.AppointmentsAsStudent)
                 .HasForeignKey(a => a.StudentId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict); // Student silinirse Appointment silinmesin
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Teacher)
                 .WithMany(u => u.AppointmentsAsTeacher)
                 .HasForeignKey(a => a.TeacherId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade); // Teacher silinirse Appointment silinsin
 
             modelBuilder.Entity<Package>()
                 .HasKey(p => p.Id);
@@ -76,16 +156,16 @@ namespace WebApplication_Infrastructure.Data
                 .HasKey(p => p.Id);
 
             modelBuilder.Entity<Payment>()
-                .HasOne<User>(p => p.User)
+                .HasOne(p => p.User)
                 .WithMany(u => u.Payments)
                 .HasForeignKey(p => p.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict); // User silinirse Payment silinmesin
 
             modelBuilder.Entity<Payment>()
-                .HasOne<Package>(p => p.Package)
+                .HasOne(p => p.Package)
                 .WithMany(p => p.Payments)
                 .HasForeignKey(p => p.PackageId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict); // Package silinirse Payment silinmesin
 
             modelBuilder.Entity<Message>()
                 .HasKey(m => m.Id);
@@ -102,7 +182,8 @@ namespace WebApplication_Infrastructure.Data
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Package>().HasData(
+            
+             modelBuilder.Entity<Package>().HasData(
                new Package
                {
                    Id = 1,

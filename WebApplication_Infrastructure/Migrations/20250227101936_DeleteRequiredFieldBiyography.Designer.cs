@@ -12,8 +12,8 @@ using WebApplication_Infrastructure.Data;
 namespace WebApplication_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250119164134_AddPackage2")]
-    partial class AddPackage2
+    [Migration("20250227101936_DeleteRequiredFieldBiyography")]
+    partial class DeleteRequiredFieldBiyography
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,139 @@ namespace WebApplication_Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Admin", b =>
                 {
@@ -115,11 +248,16 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TeacherId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
 
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("TeacherId1");
 
                     b.ToTable("Course");
                 });
@@ -138,13 +276,18 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("CourseEnrollment");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("courseEnrollments");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.CourseMaterial", b =>
@@ -178,7 +321,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("UploadedById");
 
-                    b.ToTable("CourseMaterial");
+                    b.ToTable("courseMaterials");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Message", b =>
@@ -274,6 +417,34 @@ namespace WebApplication_Infrastructure.Migrations
                             Description = "DGS temelden gelişmişe full hazırlık paketi dersleri",
                             Name = "DGS Kapsamlı Eğitimi",
                             Price = 13000.0m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "İngilizce temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "İngilizce A1-A2 Temel Seviye Eğitim",
+                            Price = 15000.0m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "İspanyolca temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "İspanyolca A1-A2 Temel Seviye Eğitim",
+                            Price = 12000.0m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Korece temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "Korece A1-A2 Temel Seviye Eğitim",
+                            Price = 16000.0m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Almanca temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "Almanca A1-B2 Temelden Orta Düzeye(İntermediate) Seviye Eğitim",
+                            Price = 17000.0m
                         });
                 });
 
@@ -287,6 +458,25 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CVC")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CardHolderName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<int>("ExpiryMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpiryYear")
+                        .HasColumnType("int");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -306,6 +496,58 @@ namespace WebApplication_Infrastructure.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("WebApplication_Domain.Entities.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("WebApplication_Domain.Entities.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Certifications")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExperienceYears")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Teachers");
+                });
+
             modelBuilder.Entity("WebApplication_Domain.Entities.TeacherBranch", b =>
                 {
                     b.Property<int>("Id")
@@ -320,13 +562,60 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TeacherId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
 
                     b.HasIndex("TeacherId");
 
+                    b.HasIndex("TeacherId1");
+
                     b.ToTable("TeacherBranches");
+                });
+
+            modelBuilder.Entity("WebApplication_Domain.Entities.TeacherRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminNotes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("CertificationsPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExperienceYears")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ReviewedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TeacherRequests");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.User", b =>
@@ -341,11 +630,12 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -361,13 +651,14 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -387,14 +678,75 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
-                    b.ToTable("Users");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Appointment", b =>
@@ -402,7 +754,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.User", "Student")
                         .WithMany("AppointmentsAsStudent")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
@@ -421,12 +773,18 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.Package", "Package")
                         .WithMany("Courses")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
                         .WithMany("CoursesAsTeacher")
                         .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication_Domain.Entities.Teacher", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -440,14 +798,18 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.Course", "Course")
                         .WithMany("EnrolledStudents")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.User", "Student")
-                        .WithMany("EnrolledCourses")
+                    b.HasOne("WebApplication_Domain.Entities.Student", "Student")
+                        .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                        .WithMany("EnrolledCourses")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Course");
 
@@ -465,7 +827,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.User", "UploadedBy")
                         .WithMany("UploadedMaterials")
                         .HasForeignKey("UploadedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -504,16 +866,38 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.Package", "Package")
                         .WithMany("Payments")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication_Domain.Entities.User", "User")
                         .WithMany("Payments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Package");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebApplication_Domain.Entities.Student", b =>
+                {
+                    b.HasOne("WebApplication_Domain.Entities.User", "User")
+                        .WithOne("StudentProfile")
+                        .HasForeignKey("WebApplication_Domain.Entities.Student", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebApplication_Domain.Entities.Teacher", b =>
+                {
+                    b.HasOne("WebApplication_Domain.Entities.User", "User")
+                        .WithOne("TeacherProfile")
+                        .HasForeignKey("WebApplication_Domain.Entities.Teacher", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -523,18 +907,35 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.Branch", "Branch")
                         .WithMany("TeacherBranches")
                         .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
                         .WithMany("TeacherBranches")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication_Domain.Entities.Teacher", null)
+                        .WithMany("TeacherBranches")
+                        .HasForeignKey("TeacherId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Branch");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("WebApplication_Domain.Entities.TeacherRequest", b =>
+                {
+                    b.HasOne("WebApplication_Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Branch", b =>
@@ -556,6 +957,18 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Navigation("Payments");
                 });
 
+            modelBuilder.Entity("WebApplication_Domain.Entities.Student", b =>
+                {
+                    b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("WebApplication_Domain.Entities.Teacher", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("TeacherBranches");
+                });
+
             modelBuilder.Entity("WebApplication_Domain.Entities.User", b =>
                 {
                     b.Navigation("AppointmentsAsStudent");
@@ -574,7 +987,11 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.Navigation("SentMessages");
 
+                    b.Navigation("StudentProfile");
+
                     b.Navigation("TeacherBranches");
+
+                    b.Navigation("TeacherProfile");
 
                     b.Navigation("UploadedMaterials");
                 });

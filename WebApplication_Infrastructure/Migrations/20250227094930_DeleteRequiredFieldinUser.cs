@@ -5,7 +5,7 @@
 namespace WebApplication_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mig5 : Migration
+    public partial class DeleteRequiredFieldinUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

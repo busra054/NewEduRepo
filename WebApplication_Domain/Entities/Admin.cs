@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication_Domain.Entities
 {
-    public class Admin
+    public class Admin : IdentityUser<int>
     {
         [Key]
         public int AdminId { get; set; }

@@ -12,7 +12,7 @@ namespace WebApplication_Domain.Entities
 
         // Relationships
         public Course Course { get; set; }
-        public User Student { get; set; }
+        public Student Student { get; set; } // User değil, Student olacak
     }
 
 }

@@ -5,7 +5,7 @@
 namespace WebApplication_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Addpackages : Migration
+    public partial class FixTeacherRequestRequiredProblem : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -3,25 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication_Domain.Entities
 {
-    public class User: IdentityUser
+    public class User: IdentityUser<int>
     {
-        [Key]
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Ad zorunludur")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string Email { get; set; }
-        [Required(ErrorMessage = "Password is required")]
-        public string PasswordHash { get; set; }
-        [Required(ErrorMessage = "Role is required")]
+
+        [Required(ErrorMessage = "Rol zorunludur")]
         public string Role { get; set; }
-        // "Admin", "Teacher", "Student"
-
-
 
         // Relationships
+        public Teacher? TeacherProfile { get; set; }
+        public Student? StudentProfile { get; set; }
+
         public ICollection<TeacherBranch> TeacherBranches { get; set; } = new List<TeacherBranch>();
         public ICollection<Appointment> AppointmentsAsStudent { get; set; } = new List<Appointment>();
         public ICollection<Appointment> AppointmentsAsTeacher { get; set; } = new List<Appointment>();
@@ -31,8 +24,11 @@ namespace WebApplication_Domain.Entities
         public ICollection<Course> CoursesAsTeacher { get; set; } = new List<Course>();
         public ICollection<CourseEnrollment> EnrolledCourses { get; set; } = new List<CourseEnrollment>();
         public ICollection<CourseMaterial> UploadedMaterials { get; set; } = new List<CourseMaterial>();
-        public ICollection<Package> PurchasedPackages { get; set; } = new List<Package>(); // Satın alınan paketler
+        public ICollection<Package> PurchasedPackages { get; set; } = new List<Package>();
+
 
 
     }
+
 }
+
