@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication_Domain.Entities
 {
@@ -7,15 +6,8 @@ namespace WebApplication_Domain.Entities
     {
         [Key]
         public int Id { get; set; }
-
-        public int? StudentId { get; set; }
-        [ForeignKey("StudentId")]
-        public Student Student { get; set; }
-
+        public int UserId { get; set; }
         public int PackageId { get; set; }
-
-        [ForeignKey("PackageId")]
-        public Package Package { get; set; }
 
         [Required]
         public DateTime PaymentDate { get; set; }
@@ -43,14 +35,9 @@ namespace WebApplication_Domain.Entities
         [Required]
         [StringLength(50, ErrorMessage = "Card holder name cannot exceed 50 characters.")]
         public string CardHolderName { get; set; }
-        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
 
-    }
-
-    public enum PaymentStatus
-    {
-        Pending,
-        Completed,
-        Failed
+        // Relationships
+        public User User { get; set; }
+        public Package Package { get; set; }
     }
 }

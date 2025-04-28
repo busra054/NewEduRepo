@@ -12,8 +12,8 @@ using WebApplication_Infrastructure.Data;
 namespace WebApplication_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250404174456_FixAssignmentRelationship")]
-    partial class FixAssignmentRelationship
+    [Migration("20250227165831_FixAdmin")]
+    partial class FixAdmin
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,89 +245,13 @@ namespace WebApplication_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
-
                     b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("WebApplication_Domain.Entities.Assignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AttachmentPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Assignments");
-                });
-
-            modelBuilder.Entity("WebApplication_Domain.Entities.AssignmentSubmission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AssignmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SubmissionDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignmentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("AssignmentSubmissions");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Branch", b =>
@@ -369,7 +293,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("TeacherId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -378,7 +302,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TeacherId1");
 
                     b.ToTable("Course");
                 });
@@ -394,9 +318,6 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -411,7 +332,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseEnrollments");
+                    b.ToTable("courseEnrollments");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.CourseMaterial", b =>
@@ -445,7 +366,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("UploadedById");
 
-                    b.ToTable("CourseMaterials");
+                    b.ToTable("courseMaterials");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Message", b =>
@@ -505,6 +426,71 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Packages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "TYT genel tüm dersler temelden gelişmişe adım adım Eğitim",
+                            Name = "TYT-Eğitimi Full Paket",
+                            Price = 14000.0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "AYT temelden gelişmişe Matematik ,Fizik, Kimya, Biyoloji Dersleri Eğitimi",
+                            Name = "AYT-Sayısal Eğitimi Full Paket",
+                            Price = 18000.0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "AYT temelden gelişmişe Matematik ,Tarih, Coğrafya, Edebiyat Dersleri eğitimi",
+                            Name = "AYT-Eşit Ağırlık Eğitimi",
+                            Price = 14000.0m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "KPSS temelden gelişmişe full hazırlık paketi dersleri",
+                            Name = "KPSS Kapsamlı Eğitimi ",
+                            Price = 23000.0m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "DGS temelden gelişmişe full hazırlık paketi dersleri",
+                            Name = "DGS Kapsamlı Eğitimi",
+                            Price = 13000.0m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "İngilizce temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "İngilizce A1-A2 Temel Seviye Eğitim",
+                            Price = 15000.0m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "İspanyolca temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "İspanyolca A1-A2 Temel Seviye Eğitim",
+                            Price = 12000.0m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Korece temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "Korece A1-A2 Temel Seviye Eğitim",
+                            Price = 16000.0m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Almanca temelden gelişmişe okuma,yazma,konuşma ve dinleme becerileri geliştirme dersleri",
+                            Name = "Almanca A1-B2 Temelden Orta Düzeye(İntermediate) Seviye Eğitim",
+                            Price = 17000.0m
+                        });
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Payment", b =>
@@ -621,7 +607,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("TeacherId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -630,7 +616,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TeacherId1");
 
                     b.ToTable("TeacherBranches");
                 });
@@ -652,9 +638,6 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CertificationsPath")
                         .HasColumnType("nvarchar(max)");
 
@@ -674,8 +657,6 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.HasIndex("UserId");
 
@@ -747,6 +728,10 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -811,59 +796,21 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Appointment", b =>
                 {
-                    b.HasOne("WebApplication_Domain.Entities.Student", "Student")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Student")
                         .WithMany("AppointmentsAsStudent")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.Teacher", "Teacher")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
                         .WithMany("AppointmentsAsTeacher")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
-                        .WithMany("AppointmentsAsStudent")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
-                        .WithMany("AppointmentsAsTeacher")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Student");
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("WebApplication_Domain.Entities.Assignment", b =>
-                {
-                    b.HasOne("WebApplication_Domain.Entities.Course", "Course")
-                        .WithMany("Assignments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("WebApplication_Domain.Entities.AssignmentSubmission", b =>
-                {
-                    b.HasOne("WebApplication_Domain.Entities.Assignment", "Assignment")
-                        .WithMany("Submissions")
-                        .HasForeignKey("AssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication_Domain.Entities.User", "Student")
-                        .WithMany("Submissions")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Assignment");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Course", b =>
@@ -874,15 +821,17 @@ namespace WebApplication_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.Teacher", "Teacher")
-                        .WithMany("Courses")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
+                        .WithMany("CoursesAsTeacher")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
-                        .WithMany("CoursesAsTeacher")
-                        .HasForeignKey("UserId");
+                    b.HasOne("WebApplication_Domain.Entities.Teacher", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Package");
 
@@ -900,7 +849,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication_Domain.Entities.User", null)
@@ -1006,15 +955,17 @@ namespace WebApplication_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.Teacher", "Teacher")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
                         .WithMany("TeacherBranches")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                    b.HasOne("WebApplication_Domain.Entities.Teacher", null)
                         .WithMany("TeacherBranches")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("TeacherId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Branch");
 
@@ -1023,26 +974,13 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.TeacherRequest", b =>
                 {
-                    b.HasOne("WebApplication_Domain.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("WebApplication_Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Branch");
-
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WebApplication_Domain.Entities.Assignment", b =>
-                {
-                    b.Navigation("Submissions");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Branch", b =>
@@ -1052,8 +990,6 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Course", b =>
                 {
-                    b.Navigation("Assignments");
-
                     b.Navigation("CourseMaterials");
 
                     b.Navigation("EnrolledStudents");
@@ -1068,15 +1004,11 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Student", b =>
                 {
-                    b.Navigation("AppointmentsAsStudent");
-
                     b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Teacher", b =>
                 {
-                    b.Navigation("AppointmentsAsTeacher");
-
                     b.Navigation("Courses");
 
                     b.Navigation("TeacherBranches");
@@ -1101,8 +1033,6 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Navigation("SentMessages");
 
                     b.Navigation("StudentProfile");
-
-                    b.Navigation("Submissions");
 
                     b.Navigation("TeacherBranches");
 
