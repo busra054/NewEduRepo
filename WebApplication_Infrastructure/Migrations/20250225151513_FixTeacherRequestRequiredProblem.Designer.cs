@@ -12,8 +12,8 @@ using WebApplication_Infrastructure.Data;
 namespace WebApplication_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250403101055_AddBranchToTeacherRequest")]
-    partial class AddBranchToTeacherRequest
+    [Migration("20250225151513_FixTeacherRequestRequiredProblem")]
+    partial class FixTeacherRequestRequiredProblem
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,57 +166,12 @@ namespace WebApplication_Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("AdminName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AdminPassword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AdminId");
@@ -245,21 +200,11 @@ namespace WebApplication_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
 
                     b.HasIndex("TeacherId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Appointments");
                 });
@@ -303,7 +248,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("TeacherId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -312,7 +257,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TeacherId1");
 
                     b.ToTable("Course");
                 });
@@ -328,9 +273,6 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -345,7 +287,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseEnrollments");
+                    b.ToTable("courseEnrollments");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.CourseMaterial", b =>
@@ -379,7 +321,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("UploadedById");
 
-                    b.ToTable("CourseMaterials");
+                    b.ToTable("courseMaterials");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Message", b =>
@@ -620,7 +562,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("TeacherId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -629,7 +571,7 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TeacherId1");
 
                     b.ToTable("TeacherBranches");
                 });
@@ -643,6 +585,7 @@ namespace WebApplication_Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdminNotes")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -651,10 +594,8 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<int?>("BranchId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CertificationsPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ExperienceYears")
@@ -673,8 +614,6 @@ namespace WebApplication_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.HasIndex("UserId");
 
@@ -746,6 +685,10 @@ namespace WebApplication_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -810,25 +753,17 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Appointment", b =>
                 {
-                    b.HasOne("WebApplication_Domain.Entities.Student", "Student")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Student")
                         .WithMany("AppointmentsAsStudent")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.Teacher", "Teacher")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
                         .WithMany("AppointmentsAsTeacher")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
-                        .WithMany("AppointmentsAsStudent")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
-                        .WithMany("AppointmentsAsTeacher")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Student");
 
@@ -843,15 +778,17 @@ namespace WebApplication_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.Teacher", "Teacher")
-                        .WithMany("Courses")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
+                        .WithMany("CoursesAsTeacher")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
-                        .WithMany("CoursesAsTeacher")
-                        .HasForeignKey("UserId");
+                    b.HasOne("WebApplication_Domain.Entities.Teacher", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Package");
 
@@ -869,7 +806,7 @@ namespace WebApplication_Infrastructure.Migrations
                     b.HasOne("WebApplication_Domain.Entities.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApplication_Domain.Entities.User", null)
@@ -975,15 +912,17 @@ namespace WebApplication_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.Teacher", "Teacher")
+                    b.HasOne("WebApplication_Domain.Entities.User", "Teacher")
                         .WithMany("TeacherBranches")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_Domain.Entities.User", null)
+                    b.HasOne("WebApplication_Domain.Entities.Teacher", null)
                         .WithMany("TeacherBranches")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("TeacherId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Branch");
 
@@ -992,18 +931,11 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.TeacherRequest", b =>
                 {
-                    b.HasOne("WebApplication_Domain.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("WebApplication_Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Branch");
 
                     b.Navigation("User");
                 });
@@ -1029,15 +961,11 @@ namespace WebApplication_Infrastructure.Migrations
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Student", b =>
                 {
-                    b.Navigation("AppointmentsAsStudent");
-
                     b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("WebApplication_Domain.Entities.Teacher", b =>
                 {
-                    b.Navigation("AppointmentsAsTeacher");
-
                     b.Navigation("Courses");
 
                     b.Navigation("TeacherBranches");

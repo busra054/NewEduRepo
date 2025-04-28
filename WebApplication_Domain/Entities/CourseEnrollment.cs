@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication_Domain.Entities
 {
@@ -10,15 +9,10 @@ namespace WebApplication_Domain.Entities
 
         public int CourseId { get; set; }
         public int StudentId { get; set; }
-        public DateTime EnrollmentDate { get; set; }
-
 
         // Relationships
-        [ForeignKey("CourseId")]
         public Course Course { get; set; }
-
-        [ForeignKey("StudentId")]
-        public Student Student { get; set; } 
+        public Student Student { get; set; } // User değil, Student olacak
     }
 
 }

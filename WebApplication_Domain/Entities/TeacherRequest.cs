@@ -12,10 +12,8 @@ namespace WebApplication_Domain.Entities
     {
         public int Id { get; set; }
 
+        
         public int UserId { get; set; }
-
-        [ForeignKey("UserId")]
-        public User? User { get; set; }
 
         [Required(ErrorMessage = "Biyografi alanı zorunludur")]
         [StringLength(2000)]
@@ -37,12 +35,8 @@ namespace WebApplication_Domain.Entities
         [StringLength(500)] 
         public string? AdminNotes { get; set; }
 
- 
-
-        public int BranchId { get; set; }
-
-        [ForeignKey("BranchId")]
-        public Branch? Branch { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
     }
 
     public enum RequestStatus
