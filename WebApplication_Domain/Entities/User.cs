@@ -5,16 +5,19 @@ namespace WebApplication_Domain.Entities
 {
     public class User: IdentityUser<int>
     {
+
         [Required(ErrorMessage = "Ad zorunludur")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Rol zorunludur")]
         public string Role { get; set; }
 
+
+
         // Relationships
         public Teacher? TeacherProfile { get; set; }
         public Student? StudentProfile { get; set; }
-
+        public ICollection<AssignmentSubmission>? Submissions { get; set; }
         public ICollection<TeacherBranch> TeacherBranches { get; set; } = new List<TeacherBranch>();
         public ICollection<Appointment> AppointmentsAsStudent { get; set; } = new List<Appointment>();
         public ICollection<Appointment> AppointmentsAsTeacher { get; set; } = new List<Appointment>();
@@ -25,8 +28,6 @@ namespace WebApplication_Domain.Entities
         public ICollection<CourseEnrollment> EnrolledCourses { get; set; } = new List<CourseEnrollment>();
         public ICollection<CourseMaterial> UploadedMaterials { get; set; } = new List<CourseMaterial>();
         public ICollection<Package> PurchasedPackages { get; set; } = new List<Package>();
-
-
 
     }
 
